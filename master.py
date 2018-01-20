@@ -24,6 +24,5 @@ camera = cv3.VideoCapture(0)
 #repeat this action forever
 while true:
     #if the placeholder1 button is pressed
-    if sd.getBoolean("placeholder1"s) == true:
-        #do blah
-        sd.getBoolean("placeholder1")
+    if sd.getBoolean("placeholder1") == true:
+        
