@@ -15,10 +15,9 @@ logging.basicConfig(level=logging.DEBUG)
 if len(sys.argv) != 2:
     print("Error: specify an IP to connect to!")
     exit(0)
-ip = sys.argv[1]
 
 //initializations and setup
-NetworkTables.initialize(server=ip)
+NetworkTables.initialize(server='roborio-6468-frc.local')
 sd = NetworkTables.getTable("SmartDashboard")
 camera = cv3.VideoCapture(0)
 
