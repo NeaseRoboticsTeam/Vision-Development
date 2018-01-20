@@ -24,5 +24,9 @@ camera = cv2.VideoCapture(0)
 #repeat this action forever
 while true:
     #if the placeholder1 button is pressed
-    if sd.getBoolean("placeholder1") == true:
-        
+    if sd.getString("Automation_Controls") == "Get_Power_Cube_Trajectory":
+        getCubeTrajectory()
+
+def getCubeTrajectory():
+    ret, frame = camera.read()
+    corners = cv2.cornerHarris(frame, 5, 4, 0.04)
