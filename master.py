@@ -5,7 +5,7 @@
 import sys
 import time
 import logging
-import cv3
+import cv2
 from networktables import NetworkTables
 
 #setup logging
@@ -19,7 +19,7 @@ if len(sys.argv) != 2:
 #initializations and setup
 NetworkTables.initialize(server='roborio-6468-frc.local')
 sd = NetworkTables.getTable("SmartDashboard")
-camera = cv3.VideoCapture(0)
+camera = cv2.VideoCapture(0)
 
 #repeat this action forever
 while true:
