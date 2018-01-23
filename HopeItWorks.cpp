@@ -7,19 +7,17 @@ https://www.chiefdelphi.com/forums/showthread.php?t=112694*/
 
 #include <iostream>
 #include <string>
-#Include <cmath>
+#include <cmath>
 #include <Windows.h>
 #include “opencv2”
 #include <>
 #include <Chrono>
-#include <BigPapa>
 
 using namespace std;
 using namespace cv2;
 
 int main() 
 {
-  cout <<  “Big papa << endl;
   cout << “opening device(s) << endl;
 
   //Initialize NetworkTables with Smart Dashboard
