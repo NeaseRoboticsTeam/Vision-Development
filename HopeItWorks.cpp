@@ -80,7 +80,6 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 		{
 			cout << "Follow through with loop break for corners" << endl;
 			break;
-			
 		}
 	}
 }
