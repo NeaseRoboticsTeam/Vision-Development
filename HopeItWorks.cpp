@@ -11,7 +11,6 @@ https://www.chiefdelphi.com/forums/showthread.php?t=112694*/
 #include <Windows.h>
 #include “opencv2”
 #include <>
-#include <Chrono>
 
 using namespace std;
 using namespace cv2;
@@ -33,7 +32,7 @@ int main()
   VideoCapture kinect;
   sensor1.open(CV_CAP_OPENNI);
 
-  switch(sd->getString(“Vision”))
+  switch (sd->getString(“Vision”))
   {
     case “getCube” : 
 	    getCube();
@@ -42,11 +41,11 @@ int main()
 	    placeHolder2();
 
     default :
-      Cout << “Do nothing” << endl;
+      Cout << “Nothing to do” << endl;
   }
 }
 
-Public void getCube(NetworkTable * smartDashboard, VideoCapture sensor)
+Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 {
   sensor.open(CV_MAP_OPENNI);
   Mat rgb, depth;
@@ -62,22 +61,26 @@ Public void getCube(NetworkTable * smartDashboard, VideoCapture sensor)
 	corners = cornerHarris(src_rgb, rgb, 2, 3, 0.04);
 	
 	int cornersDetected = 0;
-	for(int y = height; y > 0; y--)
+	
+	for (int y = height; y > 0; y--)
 	{
-		for(int x = 0; x < width; x++)
+		for (int x = 0; x < width; x++)
 		{
-			if(rgb(x, y) == [255, 255, 0] && corners(x, y) > 0.5)
+			if (rgb(x, y) == [255, 255, 0] && corners(x, y) > 0.5)
 			{
 				cornersDetected++;
 			}
-			if(cornersDetected == 6)
+			if (cornersDetected == 6)
 			{
+				cout << "6 Corners detected, breaking loop." << endl;
 				break;
 			}
 		}
-		if(cornersDetected == 6)
+		if (cornersDetected == 6)
 		{
+			cout << "Follow through with loop break for corners" << endl;
 			break;
+			
 		}
 	}
 }
