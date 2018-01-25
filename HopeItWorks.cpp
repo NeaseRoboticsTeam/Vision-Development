@@ -24,13 +24,13 @@ int main()
   cout << “opening device(s) << endl;
 
   //Initialize NetworkTables with Smart Dashboard
-  NetworkTable::SetIPAddress("//teamIP");//driverstation IP
-  NetworkTable::SetClientMode();
-  NetworkTable::SetTeam(6468);
-  NetworkTable::Initialize();
+  nt::NetworkTableInstance::SetIPAddress("//teamIP");//driverstation IP
+  nt::NetworkTableInstance::SetClientMode();
+  nt::NetworkTableInstance::SetTeam(6468);
+  nt::NetworkTableInstance::Initialize();
 
   //setup the smart dashboard (sd)
-  NetworkTable * sd;
+  nt::NetworkTableInstance * sd;
   sd->GetTable(“SmartDashboard”);
 
   VideoCapture kinect;
