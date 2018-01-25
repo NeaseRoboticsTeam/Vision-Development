@@ -13,7 +13,13 @@ int main()
 	{
 		String response;
 		cin<<"Give Permission to Drive?"<<response<<end;
-		if(response == "yes") nt::NetworkTableInstance::putString("Permission", "Yes");
-		if(response == "no") nt::NetworkTableInstance::putString("Permission", "No");
+		
+		if(response == "yes"){
+			nt::NetworkTableInstance::putString("Permission", "Yes");
+		}
+		
+		if(response == "no") {
+			nt::NetworkTableInstance::putString("Permission", "No");
+		}
 	}
 }
