@@ -7,7 +7,8 @@ int main()
 	auto inst = nt::GetDefaultInstance();
 
 	nt::NetworkTableInstance::StartClient(inst, "VisionServer", kDefaultPort);
-	nt::NetworkTableInstance::GetTable("SmartDashboard");
+	nt::NetworkTableInstance * sd;
+	sd->nt::NetworkTableInstance::GetTable("SmartDashboard");
 
 	while(true)
 	{
@@ -15,11 +16,11 @@ int main()
 		cin<<"Give Permission to Drive?"<<response<<end;
 		
 		if(response == "yes"){
-			nt::NetworkTableInstance::putString("Permission", "Yes");
+			sd->nt::NetworkTableInstance::putString("Permission", "Yes");
 		}
 		
 		if(response == "no") {
-			nt::NetworkTableInstance::putString("Permission", "No");
+			sd->nt::NetworkTableInstance::putString("Permission", "No");
 		}
 	}
 }
