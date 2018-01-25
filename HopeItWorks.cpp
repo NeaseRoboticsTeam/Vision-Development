@@ -2,7 +2,11 @@
 https://stackoverflow.com/questions/22531480/how-to-use-kinect-with-openni-and-opencv
 https://github.com/opencv/opencv/blob/master/samples/cpp/openni_capture.cpp
 https://docs.opencv.org/2.4.13.2/doc/user_guide/ug_kinect.html
-https://www.chiefdelphi.com/forums/showthread.php?t=112694*/
+https://www.chiefdelphi.com/forums/showthread.php?t=112694
+
+@author Christian
+@author Aditya
+*/
 
 
 #include <iostream>
@@ -23,7 +27,7 @@ int main()
   NetworkTable::SetIPAddress("//teamIP");//driverstation IP
   NetworkTable::SetClientMode();
   NetworkTable::SetTeam(6468);
-  NetworkTable::Initialize()
+  NetworkTable::Initialize();
 
   //setup the smart dashboard (sd)
   NetworkTable * sd;
@@ -58,7 +62,7 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 		capture.retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
 		capture.retrieve( bgrImage, CAP_OPENNI_BGR_IMAGE);
   }
-	corners = cornerHarris(src_rgb, rgb, 2, 3, 0.04);
+	corners = cornerHarris(src_rgb, rgb, 2, 3, 0.05);
 	
 	int cornersDetected = 0;
 	
@@ -72,7 +76,7 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 			}
 			if (cornersDetected == 6)
 			{
-				cout << "6 Corners detected, breaking loop." << endl;
+				cout << "Maximum amount of corners detected, breaking loop." << endl;
 				break;
 			}
 		}
@@ -82,4 +86,5 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 			break;
 		}
 	}
+	cout << "Loop broken" << endl;
 }
