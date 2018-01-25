@@ -62,13 +62,13 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 		capture.retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
 		capture.retrieve( bgrImage, CAP_OPENNI_BGR_IMAGE);
   }
-	corners = cornerHarris(src_rgb, rgb, 2, 3, 0.05);
+	corners = cornerHarris(mat, depth, 2, 3, 0.05);
 	
 	int cornersDetected = 0;
 	
-	for (int y = height; y > 0; y--)
+	for (int x = width; x > 0; x++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int y = 0; y < height; y++)
 		{
 			if (rgb(x, y) == [255, 255, 0] && corners(x, y) > 0.5)
 			{
