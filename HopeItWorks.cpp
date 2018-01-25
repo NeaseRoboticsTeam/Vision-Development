@@ -14,7 +14,7 @@ https://www.chiefdelphi.com/forums/showthread.php?t=112694
 #include <cmath>
 #include <Windows.h>
 #include “opencv2”
-#include <>
+#include "ntcore.h"
 
 using namespace std;
 using namespace cv2;
@@ -23,16 +23,12 @@ int main()
 {
   cout << “opening device(s) << endl;
 
-  //Initialize NetworkTables with Smart Dashboard
-  nt::NetworkTableInstance::SetIPAddress("//teamIP");//driverstation IP
-  nt::NetworkTableInstance::SetClientMode();
-  nt::NetworkTableInstance::SetTeam(6468);
-  nt::NetworkTableInstance::Initialize();
+  auto inst = nt::GetDefaultInstance();
 
-  //setup the smart dashboard (sd)
+  nt::NetworkTableInstance::StartClient(inst, "VisionServer", kDefaultPort);
   nt::NetworkTableInstance * sd;
-  sd->GetTable(“SmartDashboard”);
-
+  sd->nt::NetworkTableInstance::GetTable("SmartDashboard");
+  
   VideoCapture kinect;
   sensor1.open(CV_CAP_OPENNI);
 
