@@ -8,35 +8,44 @@ https://www.chiefdelphi.com/forums/showthread.php?t=112694
 @author Aditya
 */
 
-
+/*import important modules where
+opencv is for image processing,
+openni is for interacting with the kinect rgb and depth images,
+and ntcore is for accessing networktables to communicate with the roboRIO*/
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <Windows.h>
-#include “opencv2”
-#include "ntcore.h"
+#include “opencv”
+#include "openni"
+#include "ntcore"
 
+//get some namespaces
 using namespace std;
 using namespace cv2;
 
 int main() 
 {
+	//initializing stuff
   cout << “opening device(s) << endl;
-
   auto inst = nt::GetDefaultInstance();
 
+	//set up the client on ntcore and get the smartdashboard to a pointer
   nt::NetworkTableInstance::StartClient(inst, "VisionServer", kDefaultPort);
   nt::NetworkTableInstance * sd;
   sd->nt::NetworkTableInstance::GetTable("SmartDashboard");
   
-  VideoCapture kinect;
-  sensor1.open(CV_CAP_OPENNI);
-
+	//get a pointer to the kinect set up
+  VideoCapture kinect(CV_CAP_OPENNI);
+  VideoCapture * kinectPtr = &kinect;
+	
   switch (sd->getString(“Vision”))
   {
+		//do the getCube function if presented to the sd
     case “getCube” : 
-	    getCube();
+	    getCube(sd, kinectPtr);
 
+		//placeholder case
     case “placeHolder2” :
 	    placeHolder2();
 
@@ -45,22 +54,22 @@ int main()
   }
 }
 
-Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
+Public void getCube (NetworkTable * smartDashboard, VideoCapture * sensor)
 {
-  sensor.open(CV_MAP_OPENNI);
-  	Mat rgb, depth;
-	Mat corners;
-	int height = kinect.get(CV_CAP_PROP_FRAME_HEIGHT);
-	int width = kinect.get(CV_CAP_PROP_FRAME_WIDTH);
-  for(;;)
-  {
-	  kinect.grab();	
-		capture.retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
-		capture.retrieve( bgrImage, CAP_OPENNI_BGR_IMAGE);
-  }
+	//set up the depth and rgb images as well as the matrix to store the corners
+  Mat rgb, depth, corners;
+	int height = sensor->get(CV_CAP_PROP_FRAME_HEIGHT);
+	int width = sensor->get(CV_CAP_PROP_FRAME_WIDTH);
+  
+	sensor->grab();	
+	sensor->retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
+	sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
+  
 	cornerHarris(depth, corners, 2, 3, 0.05);
 	
 	int cornersDetected = 0;
+	int yVals[3];
+	float distanceToTravel;
 	
 	for (int x = width; x > 0; x++)
 	{
@@ -69,6 +78,7 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 			if (rgb(x, y) == [255, 255, 0] && corners(x, y) > 0.5)
 			{
 				cornersDetected++;
+				yVals[cornersDetected-1] = y;
 			}
 			if (cornersDetected == 6)
 			{
@@ -83,4 +93,6 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 		}
 	}
 	cout << "Loop broken" << endl;
+	sd->putNumber("Trajectory", (yVals[0]+yVals[1]+yVals[2])/3);
+	sd->putNumber("Distance_To_Drive", depth(x, y));
 }
