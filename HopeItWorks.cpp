@@ -48,7 +48,7 @@ int main()
 Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 {
   sensor.open(CV_MAP_OPENNI);
-  Mat rgb, depth;
+  	Mat rgb, depth;
 	Mat corners;
 	int height = kinect.get(CV_CAP_PROP_FRAME_HEIGHT);
 	int width = kinect.get(CV_CAP_PROP_FRAME_WIDTH);
@@ -58,7 +58,7 @@ Public void getCube (NetworkTable * smartDashboard, VideoCapture sensor)
 		capture.retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
 		capture.retrieve( bgrImage, CAP_OPENNI_BGR_IMAGE);
   }
-	corners = cornerHarris(mat, depth, 2, 3, 0.05);
+	cornerHarris(depth, corners, 2, 3, 0.05);
 	
 	int cornersDetected = 0;
 	
