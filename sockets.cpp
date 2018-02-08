@@ -2,8 +2,6 @@
 #include <string>
 #include <cmath>
 #include <Windows.h>
-#include “opencv”
-#include "openni"
 #include <sys/socket.h>
 
 int main()
@@ -23,8 +21,9 @@ int main()
   
   while(true)
   {
-    if(read(socket_desc, buffer, 2000, 0))
+    if(read(socket_desc, buffer, 2000, 0) != 0)
     {
+      send(socket_desc, "Message Received!", strlen("Message Recieved!"), 0);
     }
   }
 }
