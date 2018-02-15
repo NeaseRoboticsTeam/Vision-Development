@@ -47,7 +47,7 @@ int main()
     case “getCube” : 
 	    getCube(sd, kinectPtr);
 
-		//placeholder case
+    //placeholder case
     case “placeHolder2” :
 	    placeHolder2();
 
@@ -56,7 +56,7 @@ int main()
   }
 }
 
-public void getCube (VideoCapture &sensor)
+public array getCube (VideoCapture &sensor)
 {
 	//set up the depth and rgb images as well as the matrix to store the corners
  	Mat rgb, depth;
@@ -79,12 +79,21 @@ public void getCube (VideoCapture &sensor)
      	for( int i = 0; i< contours.size(); i++ ) // iterate through each contour. 
       	{
        		double a=contourArea( contours[i],false);  //  Find the area of contour
-       		if(a>largest_area){
-       		largest_area=a;
-		//Store the index of largest contour
-       		largest_contour_index=i;                
-		// Find the bounding rectangle for biggest contour
-       		bounding_rect=boundingRect(contours[i]);
+       		if(a>largest_area)
+		{
+			largest_area=a;
+			//Store the index of largest contour
+       			largest_contour_index=i;                
+			// Find the bounding rectangle for biggest contour
+       			bounding_rect=boundingRect(contours[i]);
+		}
        }
 		
+	Point * p1 = bounding_rect.pt1;
+	Point * p2 = bounding_rect.pt2;
+	int xy[2];
+	xy[0] = ((p1->x) + (p2->x))/2;
+	xy[1] = ((p1->y) + (p2->y))/2;
+	Point * point = Point((p1->x) + (p2->x)/2, (p1->y) + (p2->y)/2);
+	return xy;
 }
