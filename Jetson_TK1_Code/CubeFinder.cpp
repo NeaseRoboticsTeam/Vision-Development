@@ -17,8 +17,8 @@ and ntcore is for accessing networktables to communicate with the roboRIO*/
 #include <string>
 #include <cmath>
 #include <Windows.h>
-#include “opencv”
-#include "openni"
+#include <opencv2>
+#include "OpenNi2"
 #include "ntcore"
 
 //get some namespaces
@@ -55,53 +55,14 @@ int main()
   }
 }
 
-Public void getCube (NetworkTable * smartDashboard, VideoCapture * sensor)
+public void getCube (VideoCapture &sensor)
 {
 	//set up the depth and rgb images as well as the matrix to store the corners
-  Mat rgb, depth, corners;
+ 	Mat rgb, depth, corners;
 	int height = sensor->get(CV_CAP_PROP_FRAME_HEIGHT);
 	int width = sensor->get(CV_CAP_PROP_FRAME_WIDTH);
-	sensor->grab();	
-	sensor->retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
-	sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
-	cornerHarris(depth, corners, 2, 3, 0.05);
-	int cornersDetected = 0;
-	int yVals[3];
-
-	float distanceToTravel;
-
-	for (int x = width; x > 0; x++)
-	{
-		for (int y = 0; y < height; y++)
-		{
-			if (rgb(x, y) == [255, 255, 0] && corners(x, y) > 0.5)
-			{
-				cornersDetected++;
-
-				yVals[cornersDetected-1] = y;
-			}
-			if (cornersDetected == 6)
-			{
-
-				cout << "Maximum amount of corners detected, breaking loop." << endl;
-
-				break;
-
-			}
-		}
-
-		if (cornersDetected == 6)
-		{
-
-			cout << "Follow through with loop break for corners" << endl;
-
-			break;
-
-		}
-	}
-
-	cout << "Loop broken" << endl;
-	sd->putNumber("Trajectory", (yVals[0]+yVals[1]+yVals[2])/3);
-	sd->putNumber("Distance_To_Drive", depth(x, y));
-
+		
+	depth = sensor->retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
+	rgb = sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
+	
 }
