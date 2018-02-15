@@ -60,16 +60,20 @@ public void getCube (VideoCapture &sensor)
 {
 	//set up the depth and rgb images as well as the matrix to store the corners
  	Mat rgb, depth;
+	Rect bounding_rect;
+	
 	int height = sensor->get(CV_CAP_PROP_FRAME_HEIGHT);
 	int width = sensor->get(CV_CAP_PROP_FRAME_WIDTH);
 		
 	depth = sensor->retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
 	rgb = sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
 	
-	vector<vector<Point>> contours; // Vector for storing contour
+	// Vector for storing contour
+	vector<vector<Point>> contours; 
     	vector<Vec4i> hierarchy;
 
-    	findContours( rgb, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE ); // Find the contours in the image
+	// Find the contours in the image
+    	findContours(rgb, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE); 
   
      	for( int i = 0; i< contours.size(); i++ ) // iterate through each contour. 
       	{
@@ -81,4 +85,5 @@ public void getCube (VideoCapture &sensor)
 		// Find the bounding rectangle for biggest contour
        		bounding_rect=boundingRect(contours[i]);
        }
+		
 }
