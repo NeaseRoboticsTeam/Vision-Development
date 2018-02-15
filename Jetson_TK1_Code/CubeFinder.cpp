@@ -69,8 +69,9 @@ public void getCube (VideoCapture &sensor)
 	rgb = sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
 	
 	// Vector for storing contour
-	vector<vector<Point>> contours; 
-    	vector<Vec4i> hierarchy;
+	let contours = new cv.MatVector();
+	let hierarchy = new cv.Mat();
+	
 
 	// Find the contours in the image
     	findContours(rgb, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE); 
