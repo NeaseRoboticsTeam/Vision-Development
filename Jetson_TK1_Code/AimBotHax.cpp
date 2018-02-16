@@ -16,8 +16,6 @@ and ntcore is for accessing networktables to communicate with the roboRIO*/
 
 #include <iostream>
 #include <string>
-#include <cmath>
-#include <Windows.h>
 #include <opencv2>
 #include "OpenNi2"
 #include "ntcore"
@@ -28,19 +26,18 @@ using namespace cv2;
 
 int main() 
 {
-	//initializing stuff
+  //initializing stuff
   cout << “opening device(s) << endl;
   auto inst = nt::GetDefaultInstance();
 
-	//set up the client on ntcore and get the smartdashboard to a pointer
+  //set up the client on ntcore and get the smartdashboard to a pointer
   nt::NetworkTableInstance::StartClient(inst, "VisionServer", kDefaultPort);
   nt::NetworkTableInstance * sd;
   sd->nt::NetworkTableInstance::GetTable("SmartDashboard");
 
-	//get a pointer to the kinect set up
-  VideoCapture kinect(CV_CAP_OPENNI);
-  VideoCapture * kinectPtr = &kinect;
-
+  //get a pointer to the kinect set up
+  VideoCapture kinect(0);
+  
   switch (sd->getString(“Vision”))
   {
 		//do the getCube function if presented to the sd
@@ -59,26 +56,33 @@ int main()
 public array getCube (VideoCapture &sensor)
 {
 	//set up the depth and rgb images as well as the matrix to store the corners
- 	Mat rgb, depth;
+ 	Mat bgr, depth;
 	Rect bounding_rect;
 	
+	//get kinect frame height and width
 	int height = sensor->get(CV_CAP_PROP_FRAME_HEIGHT);
 	int width = sensor->get(CV_CAP_PROP_FRAME_WIDTH);
-		
+	
+	//get the depth and bgr image from kinect
 	depth = sensor->retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
 	rgb = sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
+	
+	//convert bgr image from kinect to hsv for better contours and filter out for yellow
+	Mat hsv = cvtColor(bgr, hsv, BGR2RGB);
+	Mat thresholdHsv = cvInRangeS(hsv, cvScalar(20, 100, 100), cvScalar(30, 255, 255), thresholdHsv);
 	
 	// Vector for storing contour
 	let contours = new cv.MatVector();
 	let hierarchy = new cv.Mat();
 	
-
 	// Find the contours in the image
-    	findContours(rgb, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE); 
+    	findContours(thresholdHsv, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE); 
   
-     	for( int i = 0; i< contours.size(); i++ ) // iterate through each contour. 
+	// iterate through each contour.
+     	for( int i = 0; i< contours.size(); i++ )  
       	{
-       		double a=contourArea( contours[i],false);  //  Find the area of contour
+		//  Find the area of contour
+       		double a=contourArea( contours[i],false);  
        		if(a>largest_area)
 		{
 			largest_area=a;
@@ -92,6 +96,7 @@ public array getCube (VideoCapture &sensor)
 	//save opposite corners of bounding rectangle
 	Point * p1 = bounding_rect.pt1;
 	Point * p2 = bounding_rect.pt2;
+	
 	//store the average x and y values to an array and output it
 	int xy[2];
 	xy[0] = ((p1->x) + (p2->x))/2;
