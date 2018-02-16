@@ -35,15 +35,17 @@ int main()
   nt::NetworkTableInstance * sd;
   sd->nt::NetworkTableInstance::GetTable("SmartDashboard");
 
-  //get a pointer to the kinect set up
+  //kinect set up
   VideoCapture kinect(0);
   
   switch (sd->getString(“Vision”))
   {
 		//do the getCube function if presented to the sd
     case “getCube” : 
-	    getCube(sd, kinectPtr);
-
+	    vals[2] = getCube(kinectPtr);
+    	    sd->putData(vals[0], "Autonomous X Vals");
+	    sd->putData(vals[1], "Autonomous Y Vals");
+		  
     //placeholder case
     case “placeHolder2” :
 	    placeHolder2();
@@ -92,7 +94,8 @@ public array getCube (VideoCapture &sensor)
        			bounding_rect=boundingRect(contours[i]);
 		}
        	}
-	
+
+	//getting the center of the contour
 	//save opposite corners of bounding rectangle
 	Point * p1 = bounding_rect.pt1;
 	Point * p2 = bounding_rect.pt2;
