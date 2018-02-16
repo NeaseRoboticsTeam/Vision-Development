@@ -87,10 +87,12 @@ public array getCube (VideoCapture &sensor)
 			// Find the bounding rectangle for biggest contour
        			bounding_rect=boundingRect(contours[i]);
 		}
-       }
-		
+       	}
+	
+	//save opposite corners of bounding rectangle
 	Point * p1 = bounding_rect.pt1;
 	Point * p2 = bounding_rect.pt2;
+	//store the average x and y values to an array and output it
 	int xy[2];
 	xy[0] = ((p1->x) + (p2->x))/2;
 	xy[1] = ((p1->y) + (p2->y))/2;
