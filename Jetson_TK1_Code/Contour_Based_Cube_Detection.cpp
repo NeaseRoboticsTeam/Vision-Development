@@ -1,8 +1,6 @@
 /*Sources:
-https://stackoverflow.com/questions/22531480/how-to-use-kinect-with-openni-and-opencv
-https://github.com/opencv/opencv/blob/master/samples/cpp/openni_capture.cpp
-https://docs.opencv.org/2.4.13.2/doc/user_guide/ug_kinect.html
-https://www.chiefdelphi.com/forums/showthread.php?t=112694
+Convert a Kinect color image to HSV, filter the image so that only yellow is visible, extract contours, and then get the biggest
+contour. This contour detection would then return the coordinates of the closest cube.
 
 @author Christian
 @author Aditya
@@ -17,7 +15,6 @@ and ntcore is for accessing networktables to communicate with the roboRIO*/
 #include <iostream>
 #include <string>
 #include <opencv2>
-#include "OpenNi2"
 #include "ntcore"
 
 //get some namespaces
@@ -36,7 +33,7 @@ int main()
   sd->nt::NetworkTableInstance::GetTable("SmartDashboard");
 
   //kinect set up
-  VideoCapture kinect(0);
+  VideoCapture kinect(CAP_OPENNI2);
   
   switch (sd->getString(“Vision”))
   {
@@ -66,8 +63,9 @@ public array getCube (VideoCapture &sensor)
 	int width = sensor->get(CV_CAP_PROP_FRAME_WIDTH);
 	
 	//get the depth and bgr image from kinect
+	sensor->grab();
 	depth = sensor->retrieve(rgb, CAP_OPENNI_DEPTH_MAP);
-	rgb = sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
+	bgr = sensor->retrieve(bgrImage, CAP_OPENNI_BGR_IMAGE);
 	
 	//convert bgr image from kinect to hsv for better contours and filter out for yellow
 	Mat hsv = cvtColor(bgr, hsv, BGR2RGB);
